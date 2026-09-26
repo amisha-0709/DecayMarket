@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Decay Market"
+description = "A surplus-goods marketplace demo where AI drafts listings and live decay curves adjust prices until items are claimed."
+version = "1.0.0"
+id = "artifacts/decay-market"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19959
+
+[services.development]
+run = "pnpm --filter @workspace/decay-market run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/decay-market", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/decay-market/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19959"
+BASE_PATH = "/"

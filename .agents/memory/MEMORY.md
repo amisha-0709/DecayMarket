@@ -1,0 +1,1 @@
+- [Demo listing persistence](demo-listing-persistence.md) — preserve browser-local listing behavior for parity unless asked to make the marketplace shared.

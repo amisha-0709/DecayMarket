@@ -1,0 +1,73 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: listings
+    description: Listing generation
+paths:
+  /listings/generate:
+    post:
+      operationId: generateListing
+      tags: [listings]
+      summary: Generate a listing and decay curve from a description
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListingPrompt"
+      responses:
+        "200":
+          description: Generated listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneratedListing"
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+components:
+  schemas:
+    ListingPrompt:
+      type: object
+      required: [raw, category]
+      properties:
+        raw: { type: string, minLength: 3, maxLength: 2000 }
+        category: { type: string, minLength: 1, maxLength: 80 }
+    GeneratedListing:
+      type: object
+      required: [title, description, quantity, estimated_condition, curve_type, starting_price_inr, curve_reason]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        quantity: { type: string }
+        estimated_condition: { type: number, minimum: 0, maximum: 100 }
+        curve_type: { type: string, enum: [steep_4hr, linear_24hr, flat_2week] }
+        starting_price_inr: { type: number, exclusiveMinimum: 0 }
+        curve_reason: { type: string }
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
