@@ -52,17 +52,27 @@ components:
       properties:
         raw: { type: string, minLength: 3, maxLength: 2000 }
         category: { type: string, minLength: 1, maxLength: 80 }
+        pickup_deadline_hours: { type: number, minimum: 0.5, maximum: 336 }
     GeneratedListing:
       type: object
-      required: [title, description, quantity, estimated_condition, curve_type, starting_price_inr, curve_reason]
+      required: [title, description, category, item_type, quantity, unit, condition_score, condition_label, estimated_market_value_inr, starting_price_inr, floor_price_inr, curve_type, curve_duration_hours, pickup_deadline_hours, curve_reason, confidence]
       properties:
         title: { type: string }
         description: { type: string }
-        quantity: { type: string }
-        estimated_condition: { type: number, minimum: 0, maximum: 100 }
+        category: { type: string, enum: ["Food", "Flowers", "Fabric", "Paint", "Building Materials", "Other"] }
+        item_type: { type: string }
+        quantity: { type: integer, minimum: 1 }
+        unit: { type: string }
+        condition_score: { type: number, minimum: 0, maximum: 100 }
+        condition_label: { type: string, enum: [excellent, good, usable, damaged] }
+        estimated_market_value_inr: { type: number, exclusiveMinimum: 0 }
         curve_type: { type: string, enum: [steep_4hr, linear_24hr, flat_2week] }
         starting_price_inr: { type: number, exclusiveMinimum: 0 }
+        floor_price_inr: { type: number, exclusiveMinimum: 0 }
+        curve_duration_hours: { type: number, enum: [4, 24, 336] }
+        pickup_deadline_hours: { type: number, minimum: 0.5, maximum: 336 }
         curve_reason: { type: string }
+        confidence: { type: number, minimum: 0, maximum: 100 }
     HealthStatus:
       type: object
       properties:
