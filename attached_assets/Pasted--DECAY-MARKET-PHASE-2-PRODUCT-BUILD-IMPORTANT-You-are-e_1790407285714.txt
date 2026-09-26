@@ -1,0 +1,1219 @@
+# DECAY MARKET — PHASE 2 PRODUCT BUILD
+
+## IMPORTANT
+
+You are extending an EXISTING Decay Market prototype.
+
+Do NOT rebuild the application from scratch.
+
+First inspect the existing application, its current components, routes, data model, state management, decay engine, AI integration, seed data, and styling.
+
+Preserve the existing working functionality wherever possible.
+
+The current prototype already has:
+
+* Marketplace / Browse screen
+* New Listing flow
+* AI-generated listing fields
+* AI-generated condition estimate
+* AI-selected decay curve
+* Live countdown pricing
+* Urgency badges
+* Claim action
+* Claimed listings
+* Seed/demo listings
+* Local persistence
+* Three decay archetypes:
+
+  * steep_4hr
+  * linear_24hr
+  * flat_2week
+
+The goal of Phase 2 is to evolve this from a concept demo into a USABLE marketplace prototype.
+
+Do not remove the core decay-pricing mechanic.
+
+---
+
+# 1. PRODUCT THESIS
+
+Decay Market is a marketplace for resources that are losing value because they are surplus, approaching expiry, damaged, opened, leftover, or otherwise becoming less useful.
+
+Examples:
+
+* bakery surplus
+* prepared food
+* flowers
+* fabric off-cuts
+* opened paint
+* damaged/cracked tiles
+* construction leftovers
+* event surplus
+* retail inventory approaching expiry
+* other reusable resources
+
+The core product thesis is:
+
+"AI understands what the resource is, estimates its condition and value, and selects an appropriate price-decay curve based on how quickly that resource is losing economic value."
+
+This is NOT simply a discount marketplace.
+
+The core loop is:
+
+LIST → UNDERSTAND → PRICE → DECAY → DISCOVER → CLAIM → PICK UP → RESCUE
+
+The product should make this loop obvious.
+
+---
+
+# 2. PRIMARY USER TYPES
+
+Support two simple user roles.
+
+## SELLER
+
+A person or business that has surplus/unused/soon-to-be-wasted resources.
+
+Seller goals:
+
+* list quickly
+* avoid long forms
+* let AI structure the listing
+* understand why AI chose the price/curve
+* monitor claims
+* coordinate pickup
+* see value recovered and waste diverted
+
+## BUYER / RESCUER
+
+A person looking for useful surplus resources at a lower price.
+
+Buyer goals:
+
+* quickly discover nearby resources
+* understand condition
+* understand current price
+* understand how quickly the price is changing
+* claim easily
+* know exactly where and when to collect
+* see rescue history
+
+For the prototype, the same person can switch between Seller and Buyer mode.
+
+Do not build complicated authentication.
+
+A simple demo user/session is sufficient.
+
+---
+
+# 3. NAVIGATION
+
+Create a simple persistent navigation:
+
+HOME
+BROWSE
+LIST
+MY ACTIVITY
+PROFILE
+
+Desktop:
+
+[ Decay Market ] [ Browse ] [ List something ] [ My Activity ] [ Profile ]
+
+Mobile:
+
+Bottom navigation:
+
+Home | Browse | List | Activity | Profile
+
+The "List something" action should remain visually prominent.
+
+---
+
+# 4. HOME / MARKETPLACE
+
+Redesign the existing homepage so that a first-time user immediately understands the product.
+
+Hero:
+
+## Rescue surplus before it becomes waste.
+
+Supporting copy:
+
+"Buy useful resources at prices that fall with time — because their value changes with time."
+
+Primary CTA:
+
+[BROWSE SURPLUS]
+
+Secondary CTA:
+
+[LIST SOMETHING]
+
+Add a small impact strip:
+
+Items rescued
+Value recovered
+Estimated waste diverted
+
+Use real calculations from the demo data where possible.
+
+Do not fabricate changing numbers independently from the underlying data.
+
+---
+
+# 5. BROWSE MARKETPLACE
+
+The marketplace should be the main buyer experience.
+
+Display active listings in a responsive card grid.
+
+Add filters:
+
+* All
+* Food
+* Flowers
+* Fabric
+* Paint
+* Building Materials
+* Other
+
+Add:
+
+Distance:
+
+* Within 1 km
+* Within 5 km
+* Within 10 km
+
+Condition:
+
+* Any
+* Fresh / Excellent
+* Good
+* Usable
+
+Urgency:
+
+* All
+* Going fast
+* Still fresh
+
+Sort options:
+
+* Most urgent
+* Closest
+* Lowest price
+* Recently listed
+
+Do not overcomplicate filtering.
+
+---
+
+# 6. LISTING CARD
+
+Redesign listing cards around the current price.
+
+Every active listing card should show:
+
+* photo
+* urgency badge
+* title
+* category
+* quantity
+* condition
+* current price
+* original/starting price
+* savings
+* time remaining
+* distance
+* pickup deadline
+* decay progress
+* curve type
+* Claim/View button
+
+Example visual hierarchy:
+
+PHOTO
+
+🔥 GOING FAST
+
+Fresh bakery croissants
+
+15 pieces
+
+₹120
+was ₹400
+Save ₹280
+
+Price drops for:
+01:42:18
+
+[progress bar]
+
+📍 1.8 km away
+Pickup before 7 PM
+
+[ VIEW & CLAIM ]
+
+The current price must be the largest numerical element.
+
+---
+
+# 7. URGENCY LOGIC
+
+Use the percentage of the curve elapsed.
+
+0–30%:
+⏳ STILL FRESH
+
+30–70%:
+⚡ PRICE FALLING
+
+70–90%:
+🔥 GOING FAST
+
+90–100%:
+🚨 LAST CHANCE
+
+Do not use urgency labels that imply false scarcity.
+
+The urgency should be calculated from the actual decay state.
+
+---
+
+# 8. LISTING DETAIL PAGE
+
+When a buyer clicks a listing card, open a dedicated listing detail screen/modal.
+
+Show:
+
+* large image
+* title
+* category
+* description
+* quantity
+* condition
+* seller
+* pickup location
+* distance
+* pickup deadline
+* current price
+* starting price
+* floor price
+* amount saved
+* time remaining
+* progress bar
+* decay curve visualization
+
+Add:
+
+## Why this price curve?
+
+Display the AI-generated explanation.
+
+Example:
+
+"These croissants have a short freshness window, so Decay Market is using a steep 4-hour curve. The price falls faster as the pickup deadline approaches."
+
+The AI explanation must be understandable to a normal user.
+
+Do not expose technical model terminology.
+
+---
+
+# 9. NEW LISTING — REDESIGN AROUND 10-SECOND LISTING
+
+The seller experience must feel dramatically simpler than a traditional marketplace form.
+
+Start with:
+
+## What are you trying to rescue from going to waste?
+
+Give three options:
+
+[ 📷 TAKE / UPLOAD PHOTO ]
+
+[ 🎙 DESCRIBE BY VOICE ]
+
+[ ✍ TYPE INSTEAD ]
+
+Do not immediately show a large form.
+
+---
+
+# 10. PHOTO INPUT
+
+Allow the seller to:
+
+* upload a photo
+* take a photo if browser/device support exists
+
+Show image preview.
+
+For the prototype, image analysis may be simulated if actual multimodal AI is not available, but structure the code so the photo can later be passed to a vision model.
+
+Do not claim that the AI analyzed the image if it did not.
+
+If the AI only uses text, label the result as:
+
+"AI estimate based on your description."
+
+---
+
+# 11. VOICE INPUT
+
+Implement browser-supported speech recognition if available.
+
+The seller should be able to say something like:
+
+"I have 15 croissants left from today's bakery stock. They're fresh but I need them gone by 7 PM."
+
+Convert speech to text.
+
+Display:
+
+## We heard:
+
+"I have 15 croissants left from today's bakery stock..."
+
+Allow:
+
+[ Edit ] [ Use this ]
+
+If browser speech recognition is unavailable, gracefully fall back to text input.
+
+Do not break the listing flow.
+
+---
+
+# 12. AI LISTING GENERATION
+
+Send the seller's raw description, category, and available metadata to the AI.
+
+The AI should return structured JSON.
+
+Use this schema:
+
+{
+"title": "short human-readable title",
+"description": "1-2 sentence marketplace description",
+"category": "food|flowers|fabric|paint|building_materials|other",
+"item_type": "specific item",
+"quantity": number,
+"unit": "piece|kg|litre|box|bundle|other",
+"condition_score": 0-100,
+"condition_label": "excellent|good|usable|damaged",
+"estimated_market_value_inr": number,
+"starting_price_inr": number,
+"floor_price_inr": number,
+"curve_type": "steep_4hr|linear_24hr|flat_2week",
+"curve_duration_hours": number,
+"pickup_deadline_hours": number,
+"curve_reason": "plain-English explanation",
+"confidence": 0-100
+}
+
+Only return valid JSON.
+
+---
+
+# 13. AI DECISION LOGIC
+
+The AI should consider:
+
+1. Item category
+2. Specific item type
+3. Condition
+4. Whether the item is perishable
+5. How quickly quality/value normally declines
+6. Quantity
+7. Pickup deadline
+8. Whether the resource remains useful after its ideal condition
+9. Estimated market value
+
+Do NOT make the curve selection purely category-based.
+
+Examples:
+
+Bread:
+usually steep
+
+Fresh flowers:
+usually steep
+
+Fabric off-cuts:
+usually linear
+
+Opened paint:
+usually linear
+
+Cracked but usable tiles:
+usually flat
+
+However, the AI may choose differently when the item description indicates a different decay pattern.
+
+The AI must explain its decision.
+
+---
+
+# 14. PRICING ENGINE
+
+Do not allow the LLM to directly calculate the live price every second.
+
+The AI should provide:
+
+* estimated market value
+* recommended starting price
+* floor price
+* curve type
+* duration
+
+The application should calculate live price deterministically.
+
+Formula:
+
+progress = elapsed_time / curve_duration
+
+Clamp progress between 0 and 1.
+
+For steep_4hr:
+
+Use a fast-decay curve that reaches approximately 10% of starting price by the end.
+
+For linear_24hr:
+
+Linearly move from starting price toward approximately 10% of starting price.
+
+For flat_2week:
+
+Only reduce approximately 20% across the full 14 days.
+
+The live price must never:
+
+* become negative
+* exceed starting price
+* fall below floor price
+
+Round INR values to whole rupees.
+
+---
+
+# 15. AI PROCESSING SCREEN
+
+After submission, show a short processing experience.
+
+Example:
+
+Understanding your item...
+
+✓ Identifying resource
+✓ Estimating condition
+✓ Estimating value
+✓ Selecting urgency curve
+✓ Preparing listing
+
+Then transition to the review screen.
+
+Do not make the loading animation artificially long.
+
+---
+
+# 16. SELLER REVIEW SCREEN
+
+Before publishing, show:
+
+## Here's what we understood
+
+Title
+Condition
+Quantity
+Category
+Pickup deadline
+
+Then:
+
+## AI recommendation
+
+Starting price
+Floor price
+Curve
+Duration
+
+Example:
+
+🔥 Steep 4-hour curve
+
+"Fresh bakery items lose value quickly, so we recommend a faster price drop to encourage rescue before the pickup deadline."
+
+Show a small curve preview.
+
+The seller must be able to edit:
+
+* title
+* quantity
+* condition
+* pickup deadline
+* starting price
+
+Allow the seller to override the AI recommendation.
+
+However, do not expose complicated mathematical controls.
+
+Use simple options:
+
+Fast
+Balanced
+Slow
+
+Map those options to appropriate curve types.
+
+Primary CTA:
+
+[PUBLISH LISTING]
+
+Secondary:
+
+[EDIT]
+
+---
+
+# 17. LOCATION
+
+Add pickup location to every listing.
+
+For prototype:
+
+Allow:
+
+[Use current location]
+
+or
+
+[Enter pickup location]
+
+If geolocation is unavailable, allow a manually entered demo location.
+
+Store:
+
+latitude
+longitude
+display_address
+
+Do not require precise location permission for browsing.
+
+For buyer cards, calculate approximate distance where coordinates exist.
+
+Display:
+
+📍 1.8 km away
+
+Do not expose exact seller residential addresses.
+
+---
+
+# 18. PICKUP WINDOW
+
+Every listing must have a pickup deadline.
+
+During seller listing:
+
+Pickup deadline:
+[ Today, 7:00 PM ]
+
+For durable items, allow:
+
+[ Tomorrow ]
+[ This week ]
+
+Display on buyer listing:
+
+🕐 Pickup before 7:00 PM
+
+The decay duration and pickup window should be logically consistent.
+
+For example:
+
+A 4-hour steep curve should not have a pickup deadline 3 days later.
+
+---
+
+# 19. CLAIM FLOW
+
+When buyer clicks Claim:
+
+Open confirmation modal.
+
+Show:
+
+You're rescuing:
+
+Fresh Bakery Croissants
+
+Current price:
+
+₹120
+
+Original price:
+
+₹400
+
+You save:
+
+₹280
+
+Pickup:
+
+Today before 7 PM
+
+Location:
+
+1.8 km away
+
+Primary:
+
+[ CONFIRM CLAIM ]
+
+Secondary:
+
+[ CANCEL ]
+
+Once confirmed, capture:
+
+claimant name
+listing id
+claim timestamp
+price at claim
+pickup deadline
+pickup code
+
+---
+
+# 20. CLAIM SUCCESS SCREEN
+
+After claim:
+
+## 🎉 You've rescued it.
+
+Show:
+
+Item
+Current price
+Pickup deadline
+Pickup location
+Pickup code
+
+Example:
+
+Pickup code
+4827
+
+"Show this code to the seller when collecting."
+
+Buttons:
+
+[ VIEW PICKUP DETAILS ]
+
+[ BACK TO MARKETPLACE ]
+
+---
+
+# 21. SELLER CLAIM MANAGEMENT
+
+The seller should receive an in-app claim notification/state.
+
+My Listings:
+
+ACTIVE
+CLAIMED
+COLLECTED
+EXPIRED
+
+For a claimed listing:
+
+Show:
+
+Claimed by:
+Buyer name
+
+Claim price:
+₹120
+
+Claimed at:
+timestamp
+
+Pickup:
+before 7 PM
+
+Code:
+4827
+
+Button:
+
+[ MARK AS COLLECTED ]
+
+---
+
+# 22. LISTING LIFECYCLE
+
+Implement these states:
+
+DRAFT
+ACTIVE
+CLAIMED
+COLLECTED
+EXPIRED
+
+Rules:
+
+ACTIVE:
+listing is visible and price is decaying.
+
+CLAIMED:
+listing is no longer available to other buyers.
+
+COLLECTED:
+seller confirms successful pickup.
+
+EXPIRED:
+listing reaches its deadline without a claim.
+
+Do not leave expired listings permanently claimable.
+
+If a listing reaches the end of its decay duration, it should either:
+
+* expire, or
+* remain available until the configured pickup deadline if that behavior is explicitly defined.
+
+Use a consistent rule across the prototype.
+
+---
+
+# 23. MY ACTIVITY
+
+Create an activity screen with two modes:
+
+## As Buyer
+
+Show:
+
+* active claims
+* pickup details
+* rescue history
+
+Example:
+
+7 items rescued
+₹2,340 saved
+12.4 kg estimated waste diverted
+
+## As Seller
+
+Show:
+
+* active listings
+* claimed listings
+* collected listings
+* expired listings
+* value recovered
+
+---
+
+# 24. SELLER DASHBOARD
+
+Create a simple seller dashboard.
+
+Metrics:
+
+Active listings
+Claims
+Successful collections
+Expired listings
+Value recovered
+Estimated waste diverted
+
+Example:
+
+ACTIVE
+3
+
+CLAIMED
+8
+
+COLLECTED
+6
+
+VALUE RECOVERED
+₹3,420
+
+RESCUED
+22.4 kg
+
+Also display listing history.
+
+---
+
+# 25. BUYER PROFILE
+
+Create a simple profile/rescue history.
+
+Show:
+
+Items rescued
+Money saved
+Estimated waste diverted
+Successful pickups
+
+Example:
+
+🔥 7 rescues
+
+₹2,340 saved
+
+12.4 kg diverted
+
+Do not implement complicated social gamification yet.
+
+---
+
+# 26. IMPACT CALCULATION
+
+For each category, define a simple demo conversion factor.
+
+Example:
+
+food → estimated kg
+flowers → estimated kg
+fabric → estimated kg
+paint → estimated kg
+building materials → estimated kg
+
+Store an estimated waste weight per quantity.
+
+For example:
+
+food:
+quantity × estimated_weight_per_unit
+
+Do not present these numbers as scientific measurements.
+
+Label them:
+
+"Estimated waste diverted"
+
+The impact number should be derived from actual claims/collections, not simply all listings.
+
+---
+
+# 27. DATA MODEL
+
+Extend the current listing model.
+
+Listing:
+
+id
+seller_id
+seller_name
+category
+item_type
+title
+description
+photo_url
+quantity
+unit
+condition_score
+condition_label
+estimated_market_value_inr
+starting_price
+floor_price
+curve_type
+curve_duration_hours
+listed_at
+pickup_deadline
+location_lat
+location_lng
+location_label
+status
+ai_reason
+ai_confidence
+created_at
+updated_at
+
+Claim:
+
+id
+listing_id
+claimant_id
+claimant_name
+claimed_at
+price_at_claim
+pickup_deadline
+pickup_code
+status
+
+Claim status:
+
+CLAIMED
+COLLECTED
+NO_SHOW
+
+---
+
+# 28. DEMO DATA
+
+Retain the existing five seed listings.
+
+Ensure they demonstrate:
+
+Bread → steep
+Flowers → steep
+Fabric → linear
+Paint → linear
+Tiles → flat
+
+Add realistic:
+
+* pickup deadlines
+* locations
+* distances
+* conditions
+* quantities
+* market values
+* floor prices
+
+Make sure their timestamps are generated dynamically so the demo remains functional.
+
+Do not hard-code a countdown that becomes invalid after deployment.
+
+---
+
+# 29. DESIGN DIRECTION
+
+Keep the existing visual identity but make the interface more product-like.
+
+Design principles:
+
+1. Current price is the most prominent number.
+2. Time remaining is immediately visible.
+3. Urgency should be understandable without explanation.
+4. AI reasoning should be visible but not overwhelming.
+5. Seller flow should feel fast.
+6. Buyer flow should feel trustworthy.
+7. Use warm urgency states for fast-decaying resources.
+8. Use calm/fresh states for early-stage listings.
+9. Use responsive layouts.
+10. Make mobile interaction excellent.
+
+Avoid excessive gradients, animations, cards inside cards, and unnecessary dashboard complexity.
+
+---
+
+# 30. TRUST PRINCIPLES
+
+Because users are buying surplus/decaying resources, clearly communicate:
+
+* condition is estimated
+* photos may be seller-provided
+* AI estimates are not guarantees
+* pickup deadline
+* seller information
+* current price
+* quantity
+
+Never hide important information behind an AI label.
+
+The AI should increase transparency, not reduce it.
+
+---
+
+# 31. EMPTY STATES
+
+Every major screen needs a useful empty state.
+
+Marketplace:
+
+"No active surplus nearby yet."
+
+[ LIST SOMETHING ]
+
+Claims:
+
+"You haven't rescued anything yet."
+
+[ BROWSE SURPLUS ]
+
+Seller listings:
+
+"Your first surplus listing takes about 10 seconds."
+
+[ LIST SOMETHING ]
+
+---
+
+# 32. ERROR HANDLING
+
+If AI fails:
+
+Do not break the app.
+
+Show:
+
+"We couldn't generate the listing automatically."
+
+Allow manual entry.
+
+If voice recognition fails:
+
+"Voice input isn't available right now."
+
+Fall back to text.
+
+If photo upload fails:
+
+Allow listing without a photo, but warn that buyers will have less visual information.
+
+If location permission fails:
+
+Allow manual location entry.
+
+If claim fails:
+
+Do not create duplicate claims.
+
+---
+
+# 33. RESPONSIVENESS
+
+The application must work well on:
+
+* desktop
+* tablet
+* mobile
+
+The buyer flow should be especially mobile-friendly.
+
+The listing flow should be usable with one hand on mobile.
+
+---
+
+# 34. PRODUCT LANGUAGE
+
+Prefer:
+
+"Rescue"
+"Surplus"
+"Recover value"
+"Price falls with time"
+"Condition"
+"Pickup"
+"Claim"
+
+Avoid positioning the product primarily as:
+
+"cheap goods"
+"discount marketplace"
+"clearance"
+
+The product is about recovering value from resources that are losing value.
+
+---
+
+# 35. IMPORTANT PRODUCT MESSAGE
+
+Keep this message visible in the product somewhere meaningful:
+
+"AI doesn't just write the listing. It estimates how quickly this resource is losing value and chooses a price-decay curve accordingly."
+
+This is the core differentiation.
+
+---
+
+# 36. DO NOT OVERBUILD
+
+For this phase, do NOT implement:
+
+* real payment processing
+* production authentication
+* real delivery integrations
+* complex maps
+* external POS integrations
+* advanced machine-learning training
+* real-time buyer push notifications
+* ratings/reputation system
+* auction mode
+* business API
+
+Build the interfaces and data structures so these can be added later.
+
+---
+
+# 37. ACCEPTANCE CRITERIA
+
+The Phase 2 prototype is complete only when a new user can independently perform this complete flow:
+
+SELLER:
+
+1. Open Decay Market.
+2. Understand the proposition.
+3. Tap "List something."
+4. Upload/take a photo.
+5. Type or speak a natural description.
+6. AI extracts item information.
+7. AI estimates condition.
+8. AI recommends starting/floor price.
+9. AI chooses a decay curve.
+10. AI explains why.
+11. Seller reviews and can edit.
+12. Seller publishes.
+13. Listing appears in marketplace.
+14. Price visibly decays.
+
+BUYER:
+
+15. Open marketplace.
+16. Filter/browse listings.
+17. Open listing detail.
+18. Understand current price and savings.
+19. Understand condition.
+20. Understand why the curve exists.
+21. See pickup location and deadline.
+22. Claim the listing.
+23. See claim confirmation.
+24. Receive pickup code.
+
+SELLER:
+
+25. See that listing is claimed.
+26. See buyer/pickup information.
+27. Mark item collected.
+
+SYSTEM:
+
+28. Listing moves from ACTIVE → CLAIMED → COLLECTED.
+29. Impact metrics update.
+30. Claimed listing disappears from active marketplace.
+31. Expired listings are no longer claimable.
+32. All data persists during the demo session.
+
+---
+
+# 38. FINAL IMPLEMENTATION RULE
+
+Before changing anything:
+
+1. Inspect the existing code.
+2. Reuse existing components.
+3. Reuse the existing decay engine.
+4. Reuse the existing AI integration where possible.
+5. Reuse existing seed data.
+6. Preserve the existing visual identity.
+7. Add functionality incrementally.
+8. Do not replace working functionality with mock UI.
+
+After implementation, test the complete:
+
+LIST → AI → REVIEW → PUBLISH → BROWSE → CLAIM → PICKUP → COLLECTED
+
+journey.
+
+The finished prototype should feel like a small but coherent real product, not a collection of disconnected demo screens.
